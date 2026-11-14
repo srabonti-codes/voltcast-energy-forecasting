@@ -26,7 +26,8 @@ def test_health_endpoint() -> None:
     assert response.status_code == 200
     payload = response.json()
     assert payload["application"] == "VoltCast"
-    assert "prediction_ready" in payload
+    assert payload["status"] == "degraded"
+    assert payload["prediction_ready"] is False
     head = client.head("/api/health")
     assert head.status_code == 200
     assert head.content == b""
@@ -36,11 +37,29 @@ def test_model_info_endpoint() -> None:
     response = client.get("/api/model-info")
     assert response.status_code == 200
     payload = response.json()
-    assert payload["model_name"] == "Linear Regression"
+    assert payload["model_name"] == "Unavailable"
     assert isinstance(payload["feature_columns"], list)
+    assert payload["feature_columns"] == []
 
 
-def test_valid_prediction_endpoint() -> None:
+def test_valid_prediction_endpoint(monkeypatch) -> None:
+    class ReadyService:
+        @staticmethod
+        def is_ready() -> bool:
+            return True
+
+        @staticmethod
+        def predict(payload):
+            return {
+                "predicted_consumption": 1234.5,
+                "unit": "kW",
+                "status": "success",
+                "model_name": "Test Model",
+                "timestamp": payload.timestamp.isoformat(),
+                "metadata": {"feature_columns": []},
+            }
+
+    monkeypatch.setattr(routes, "ml_service", ReadyService())
     payload = {
         "timestamp": "2024-01-15T18:30:00",
         "temperature": 20.0,
@@ -54,7 +73,7 @@ def test_valid_prediction_endpoint() -> None:
     body = response.json()
     assert body["status"] == "success"
     assert body["unit"] == "kW"
-    assert isinstance(body["predicted_consumption"], float)
+    assert body["predicted_consumption"] == 1234.5
 
 
 def test_invalid_prediction_endpoint() -> None:
@@ -88,9 +107,9 @@ def test_metrics_endpoint() -> None:
     response = client.get("/api/metrics")
     assert response.status_code == 200
     payload = response.json()
-    assert payload["model_name"] == "Linear Regression"
-    assert payload["dataset_summary"]["records_count"] > 0
-    assert payload["dataset_summary"]["zone_1_unit"] == "kW"
+    assert payload["model_name"] == "Unavailable"
+    assert payload["dataset_summary"]["dataset_loaded"] is False
+    assert payload["dataset_summary"]["records_count"] is None
 
 
 def test_missing_model_reports_degraded_and_rejects_predictions(tmp_path: Path, monkeypatch) -> None:
@@ -119,7 +138,6 @@ def test_missing_model_reports_degraded_and_rejects_predictions(tmp_path: Path, 
 def test_missing_dataset_is_reported_without_fake_metrics(tmp_path: Path) -> None:
     service = MLService(data_path=tmp_path / "missing-dataset.csv")
 
-    assert service.is_ready()
     assert service.dataset_summary["dataset_loaded"] is False
     assert "historical_average_zone1_kw" not in service.dataset_summary
 

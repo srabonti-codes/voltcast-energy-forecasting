@@ -46,7 +46,10 @@ class MLService:
             self.scaler = None
             self.metrics = {}
             self.load_error = str(exc)
-            logger.exception("Could not load model artifact at %s", self.model_path)
+            if isinstance(exc, FileNotFoundError):
+                logger.warning("Model artifact is unavailable at %s", self.model_path)
+            else:
+                logger.exception("Could not load model artifact at %s", self.model_path)
         self.dataset_summary = self._load_dataset_summary()
 
     def _load_dataset_summary(self) -> dict[str, Any]:
@@ -86,7 +89,10 @@ class MLService:
             }
             return summary
         except (OSError, ValueError, KeyError, pd.errors.ParserError) as exc:
-            logger.exception("Could not load dataset at %s", self.data_path)
+            if isinstance(exc, FileNotFoundError):
+                logger.warning("Dataset is unavailable at %s", self.data_path)
+            else:
+                logger.exception("Could not load dataset at %s", self.data_path)
             return {
                 "dataset_loaded": False,
                 "dataset_name": "Tetouan City Power Consumption Dataset",

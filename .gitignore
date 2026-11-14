@@ -13,6 +13,8 @@ build/
 dist/
 site/
 *.whl
+coverage/
+.cache/
 
 # Test, type-checker, and linter caches
 .pytest_cache/
@@ -39,14 +41,21 @@ frontend/dist/
 node_modules/
 
 # Local-only data and generated experiment artifacts
-backend/data/local/
-backend/data/private/
+backend/data/
 backend/outputs/
 backend/checkpoints/
 backend/app/models/checkpoints/
-*.joblib.tmp
+backend/app/models/
+*.pkl
+*.pickle
+*.joblib
+*.keras
+*.h5
+*.pt
+*.pth
 *.tmp
 *.log
+*.bak
 *.db
 *.sqlite
 *.sqlite3
@@ -56,6 +65,8 @@ backend/app/models/checkpoints/
 *.p12
 *.pfx
 *.crt
+*.cer
+*.der
 
 # Editors and operating systems
 .DS_Store
