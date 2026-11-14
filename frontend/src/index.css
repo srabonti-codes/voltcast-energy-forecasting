@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #edf8ff;
+  --color-brand-100: #d8f0ff;
+  --color-brand-300: #77d9ff;
+  --color-brand-500: #36a3ff;
+  --color-brand-600: #1d7ae6;
+  --color-brand-700: #1a5fb4;
+  --shadow-glow: 0 0 30px rgba(54, 163, 255, 0.25);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, 'Segoe UI', sans-serif;
+  background-color: #020817;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at top left, rgba(54, 163, 255, 0.18), transparent 30%),
+    linear-gradient(180deg, #020817 0%, #0b1120 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@layer components {
+  .card-surface {
+    @apply rounded-2xl border border-slate-800 bg-slate-900/80 shadow-glow backdrop-blur-sm;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2.5 text-sm text-slate-100 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+  }
+
+  .label {
+    @apply mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-slate-400;
+  }
+}

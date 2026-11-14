@@ -1,0 +1,67 @@
+# Python environments and generated files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+ENV/
+.python-version
+.tox/
+build/
+dist/
+site/
+*.whl
+
+# Test, type-checker, and linter caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter temporary checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Tool caches and frontend build output
+.vite/
+frontend/dist/
+
+# Local environment values
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Node dependencies and build output
+node_modules/
+
+# Local-only data and generated experiment artifacts
+backend/data/local/
+backend/data/private/
+backend/outputs/
+backend/checkpoints/
+backend/app/models/checkpoints/
+*.joblib.tmp
+*.tmp
+*.log
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
