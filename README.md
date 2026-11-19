@@ -2,7 +2,7 @@
 
 VoltCast is a full-stack power-consumption estimation project. It combines a Jupyter model-training workflow, a FastAPI inference service, and a React interface for submitting weather and time inputs.
 
-**Live previews:** [Estatora](https://estatora.onrender.com/) · [VoltCast](https://voltcast.onrender.com/) · [Tranzacta](https://tranzacta.onrender.com/)
+**Live preview:** [VoltCast](https://voltcast.onrender.com/)
 
 VoltCast predicts **Zone 1 power consumption** for a supplied timestamp and weather observation. It is a single-point regression tool: it does not fetch live weather, read grid telemetry, or generate an autonomous multi-step forecast.
 
